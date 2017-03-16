@@ -1,0 +1,75 @@
+[2017-03-14 19:28:58.197] [ERROR] dateFileLog - YUD7FDkzgzw3sku6bs31uy64jChGnqJM2BBMY1J9c5zMeZyJzk8m1g9Ig5gPAQgo { inclient: 
+   { ValidationError: Account validation failed
+       at MongooseError.ValidationError (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\error\validation.js:23:11)
+       at model.Document.invalidate (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:1535:32)
+       at model.Document.set (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:777:10)
+       at model._handleIndex (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:623:14)
+       at model.Document.set (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:583:24)
+       at model.Document (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:71:12)
+       at model.Model (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\model.js:51:12)
+       at new model (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\model.js:3552:13)
+       at exports.postAccounts (c:\workspace\nodejs\workspace\IMS-Server\controllers\account.js:16:17)
+       at Layer.handle [as handle_request] (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\layer.js:95:5)
+       at next (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:131:13)
+       at next (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:125:14)
+       at Route.dispatch (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:112:3)
+       at Layer.handle [as handle_request] (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\layer.js:95:5)
+       at c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\index.js:277:22
+       at Function.process_params (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\index.js:330:12)
+     errors: { type: [Object] },
+     message: 'Account validation failed',
+     name: 'ValidationError' },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489490938197,
+  err: undefined }
+[2017-03-14 19:51:12.981] [ERROR] dateFileLog - W5HDFAzLKu9vJ0ZyorVDGkNOSXrQQfGIdJ8kmrGM5O5vLmCZ6SOuYmTJn8zC7KmR { inclient: 
+   { ValidationError: Account validation failed
+       at MongooseError.ValidationError (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\error\validation.js:23:11)
+       at model.Document.invalidate (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:1535:32)
+       at model.Document.set (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:777:10)
+       at model._handleIndex (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:623:14)
+       at model.Document.set (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:583:24)
+       at model.Document (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:71:12)
+       at model.Model (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\model.js:51:12)
+       at new model (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\model.js:3552:13)
+       at exports.postAccounts (c:\workspace\nodejs\workspace\IMS-Server\controllers\account.js:16:17)
+       at Layer.handle [as handle_request] (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\layer.js:95:5)
+       at next (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:131:13)
+       at next (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:125:14)
+       at Route.dispatch (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:112:3)
+       at Layer.handle [as handle_request] (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\layer.js:95:5)
+       at c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\index.js:277:22
+       at Function.process_params (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\index.js:330:12)
+     errors: { type: [Object] },
+     message: 'Account validation failed',
+     name: 'ValidationError' },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489492272981,
+  err: undefined }
+[2017-03-14 19:51:26.236] [ERROR] dateFileLog - v4UjW4SzOSCdZa62zVSDBOh64jTSBn5UZeBA2O7hjytac5uYHshVM9IPMsNeDKaS { inclient: 
+   { ValidationError: Account validation failed
+       at MongooseError.ValidationError (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\error\validation.js:23:11)
+       at model.Document.invalidate (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:1535:32)
+       at model.Document.set (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:777:10)
+       at model._handleIndex (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:623:14)
+       at model.Document.set (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:583:24)
+       at model.Document (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\document.js:71:12)
+       at model.Model (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\model.js:51:12)
+       at new model (c:\workspace\nodejs\workspace\IMS-Server\node_modules\mongoose\lib\model.js:3552:13)
+       at exports.postAccounts (c:\workspace\nodejs\workspace\IMS-Server\controllers\account.js:16:17)
+       at Layer.handle [as handle_request] (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\layer.js:95:5)
+       at next (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:131:13)
+       at next (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:125:14)
+       at Route.dispatch (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\route.js:112:3)
+       at Layer.handle [as handle_request] (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\layer.js:95:5)
+       at c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\index.js:277:22
+       at Function.process_params (c:\workspace\nodejs\workspace\IMS-Server\node_modules\express\lib\router\index.js:330:12)
+     errors: { type: [Object] },
+     message: 'Account validation failed',
+     name: 'ValidationError' },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489492286236,
+  err: undefined }

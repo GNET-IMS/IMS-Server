@@ -1,0 +1,175 @@
+[2017-03-15 15:05:42.821] [ERROR] dateFileLog - o5KF0tL3K7Q7ed4LOolr7qBpJcRG3vjRT7tJLrroCFbIcXUSJ5904T3o1g6vCUby { inclient: 
+   { MongoError: E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "niha" }
+       at Function.MongoError.create (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\error.js:31:11)
+       at toError (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:114:22)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\collection.js:658:23
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:465:9
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at resultHandler (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:413:5)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\connection\pool.js:455:18
+       at _combinedTickCallback (internal/process/next_tick.js:67:7)
+       at process._tickCallback (internal/process/next_tick.js:98:9)
+     name: 'MongoError',
+     message: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "niha" }',
+     driver: true,
+     code: 11000,
+     index: 0,
+     errmsg: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "niha" }',
+     getOperation: [Function],
+     toJSON: [Function],
+     toString: [Function] },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489561542821,
+  err: undefined }
+[2017-03-15 15:05:50.374] [ERROR] dateFileLog - UZCRtWCxOxo2Bj48hUAqOyxOpxoyHUHQciXN2p97gdvfFeT55RnxzjppcXjnLxOE { inclient: 
+   { MongoError: E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "niha" }
+       at Function.MongoError.create (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\error.js:31:11)
+       at toError (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:114:22)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\collection.js:658:23
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:465:9
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at resultHandler (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:413:5)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\connection\pool.js:455:18
+       at _combinedTickCallback (internal/process/next_tick.js:67:7)
+       at process._tickCallback (internal/process/next_tick.js:98:9)
+     name: 'MongoError',
+     message: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "niha" }',
+     driver: true,
+     code: 11000,
+     index: 0,
+     errmsg: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "niha" }',
+     getOperation: [Function],
+     toJSON: [Function],
+     toString: [Function] },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489561550374,
+  err: undefined }
+[2017-03-15 15:08:01.452] [ERROR] dateFileLog - JvaLyi2ZyXDwBqMeDJb687A65Dqn4gAUaMVhGog1dsM9YEHbrQyKjvpsJipb0mb7 { inclient: 
+   { MongoError: E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni2ha" }
+       at Function.MongoError.create (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\error.js:31:11)
+       at toError (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:114:22)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\collection.js:658:23
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:465:9
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at resultHandler (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:413:5)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\connection\pool.js:455:18
+       at _combinedTickCallback (internal/process/next_tick.js:67:7)
+       at process._tickCallback (internal/process/next_tick.js:98:9)
+     name: 'MongoError',
+     message: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni2ha" }',
+     driver: true,
+     code: 11000,
+     index: 0,
+     errmsg: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni2ha" }',
+     getOperation: [Function],
+     toJSON: [Function],
+     toString: [Function] },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489561681452,
+  err: undefined }
+[2017-03-15 15:16:34.994] [ERROR] dateFileLog - awA2f20NDW0of2R6NpaC9QTKq8s3TnJTGNLgAS4fGfT1Qf9EBa74NM2iGkAs8pL3 { inclient: 
+   { MongoError: E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni2ha" }
+       at Function.MongoError.create (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\error.js:31:11)
+       at toError (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:114:22)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\collection.js:658:23
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:465:9
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at resultHandler (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:413:5)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\connection\pool.js:455:18
+       at _combinedTickCallback (internal/process/next_tick.js:67:7)
+       at process._tickCallback (internal/process/next_tick.js:98:9)
+     name: 'MongoError',
+     message: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni2ha" }',
+     driver: true,
+     code: 11000,
+     index: 0,
+     errmsg: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni2ha" }',
+     getOperation: [Function],
+     toJSON: [Function],
+     toString: [Function] },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489562194994,
+  err: undefined }
+[2017-03-15 15:18:00.836] [ERROR] dateFileLog - pb9RtV9fgbNEARILw43QqGJLnRPKXSYWZN918ou7H2ZxqjdARh2jUdjZQVUUZyds { inclient: 
+   { MongoError: E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni22a" }
+       at Function.MongoError.create (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\error.js:31:11)
+       at toError (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:114:22)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\collection.js:658:23
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:465:9
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at resultHandler (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:413:5)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\connection\pool.js:455:18
+       at _combinedTickCallback (internal/process/next_tick.js:67:7)
+       at process._tickCallback (internal/process/next_tick.js:98:9)
+     name: 'MongoError',
+     message: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni22a" }',
+     driver: true,
+     code: 11000,
+     index: 0,
+     errmsg: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "ni22a" }',
+     getOperation: [Function],
+     toJSON: [Function],
+     toString: [Function] },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489562280836,
+  err: undefined }
+[2017-03-15 15:26:06.903] [ERROR] dateFileLog - ggENVMiUd77L2YdN5vSkYmr0T2zlsQGiHgn8PKa1WhFhWjEOx0A6513Rf4inTKk8 { inclient: 
+   { MongoError: E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "1111" }
+       at Function.MongoError.create (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\error.js:31:11)
+       at toError (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:114:22)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\collection.js:658:23
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:465:9
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at resultHandler (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:413:5)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\connection\pool.js:455:18
+       at _combinedTickCallback (internal/process/next_tick.js:67:7)
+       at process._tickCallback (internal/process/next_tick.js:98:9)
+     name: 'MongoError',
+     message: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "1111" }',
+     driver: true,
+     code: 11000,
+     index: 0,
+     errmsg: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "1111" }',
+     getOperation: [Function],
+     toJSON: [Function],
+     toString: [Function] },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489562766903,
+  err: undefined }
+[2017-03-15 15:48:17.165] [ERROR] dateFileLog - Ia8eo9JolwUjey7lMYOhfWio5oUZUdPmuDFzJchzSERM5d3hjV55aizRMfgFib0D { inclient: 
+   { MongoError: E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "2" }
+       at Function.MongoError.create (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\error.js:31:11)
+       at toError (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:114:22)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\collection.js:658:23
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:465:9
+       at handleCallback (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\utils.js:95:56)
+       at resultHandler (C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb\lib\bulk\unordered.js:413:5)
+       at C:\workspace\nodejs\workspace\IMS-Server\node_modules\mongodb-core\lib\connection\pool.js:455:18
+       at _combinedTickCallback (internal/process/next_tick.js:67:7)
+       at process._tickCallback (internal/process/next_tick.js:98:9)
+     name: 'MongoError',
+     message: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "2" }',
+     driver: true,
+     code: 11000,
+     index: 0,
+     errmsg: 'E11000 duplicate key error collection: IMS.users index: username_1 dup key: { : "2" }',
+     getOperation: [Function],
+     toJSON: [Function],
+     toString: [Function] },
+  inuser: undefined,
+  message: undefined,
+  timestamp: 1489564097165,
+  err: undefined }
