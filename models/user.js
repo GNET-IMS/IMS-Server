@@ -1,16 +1,17 @@
 // Load required packages
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
+var encryption = require('../services/encryption');
 
 // Define our user schema
 var UserSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  sex: { type: Number, required: true },
-  email: { type: String, required: true },
+  sex: { type: Number, required: false },
+  email: { type: String, required: false },
   name: { type: String, required: true },
   birthday: { type: String, required: false },
-  department: { type: String, required: false },
+  department: { type: String, required: true },
   title: { type: String, required: false },
   avatar_url: { type: String, required: false },
   is_admin: { type: Boolean, required: true },
@@ -23,17 +24,10 @@ UserSchema.pre('save', function(callback) {
 
   // Break out if the password hasn't changed
   if (!user.isModified('password')) return callback();
-
-  // Password changed so we need to hash it
-  bcrypt.genSalt(5, function(err, salt) {
-    if (err) return callback(err);
-
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
-      if (err) return callback(err);
-      user.password = hash;
-      callback();
-    });
-  });
+  encryption.passwordEncode(user.password, function(password) {
+    user.password = password;
+    callback();
+  })
 });
 
 UserSchema.methods.verifyPassword = function(password, cb) {

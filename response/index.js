@@ -3,7 +3,7 @@ var logger = require('../log').logger;
 exports.error = function(req, res, obj) {
   var errorid = uid(64);
   recordErrorLog(errorid, obj.message);
-  res.status(obj.status);
+  res.status(obj.status || 500);
   res.json(createResult(errorid, obj));
 }
 

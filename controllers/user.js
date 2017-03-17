@@ -2,130 +2,157 @@
 var { response, error } = require('../response');
 var gitlab = require('../services/gitlab');
 var zentao = require('../services/zentao');
+var db = require('../services/db');
 var User = require('../models/user');
 var moment = require('moment');
-var { save, batchSave, remove, update } = require('../services/user');
-
-var save =
+var encryption = require('../services/encryption');
+var userServices = require('../services/user');
 
 // Create endpoint /api/users for POST
-exports.postUsers = function(req, res) {
-
+exports.postUsers = function (req, res) {
   var data = req.body;
-
-  var callback = response(req, res, err, function() {
-    gitlab.createUser({
-      name: data.name,
-      username: data.username,
-      password: data.password,
-      email: data.email,
-    }, function(result) {
-      if (result) console.log('创建gitlab账号, 请查看你的邮箱');
-    });
-
-    zentao.createUser({
-        dept: 1,
-        gender: data.sex === '0' ? 'm' : 'f',
-        account: data.username,
-        realname: data.name,
-        password1: data.password,
-        password2: data.password,
-        verifyPassword: 123456,
-      }, function(data, err) {
-        if (err) console.log(err)
-        else console.log(data)
-    });
-
-    return {
-      message: '创建职员成功',
-    }
-  }, function(error) {
-    return {
-      message: '创建职员失败',
-      errorMessage: error
-    }
-  });
-
   if (data instanceof Array) {
-    batchSave(data, callback);
+      batchSave(data, req, res);
   } else {
-    save(data, callback)
+    var user = new User({
+      username: data.username,
+      password: `${data.password}`,
+      sex: +data.sex || 0,
+      email: data.email || '',
+      name: data.name,
+      birthday: data.birthday || '',
+      department: data.department,
+      title: data.title || '',
+      avatar_url: data.avatar_url || '',
+      is_admin: data.is_admin || false,
+      created_at: moment().format('YYYY-MM-DD hh:mm:ss'),
+    });
+    user.save(function (err) {
+      response(req, res, err, function () {
+        userServices.createOtherAccount(data);
+        return {
+          message: '创建职员成功',
+        }
+      }, function (error) {
+        return {
+          message: '创建职员失败',
+          errorMessage: error
+        }
+      });
+    });
   }
 };
 
-exports.getUsers = function(req, res) {
-  User.find(function(err, users) {
-    response(req, res, err, function() {
+var batchSave = function (data, req, res) {
+  const currentTime = moment().format('YYYY-MM-DD hh:mm:ss');
+  const users = data.map(item => {
+    item.is_admin = false;
+    item.created_at = currentTime;
+    item.password = encryption.passwordEncodeSync(item.password);
+    return item;
+  })
+  User.collection.insert(users, function (err, docs) {
+    response(req, res, err, function () {
+    userServices.batchCreateOtherAccount(users);
+      return {
+        message: '创建职员成功',
+      }
+    }, function (error) {
+      return {
+        message: err.toString(),
+        errorMessage: err.toString(),
+      }
+    });
+  })
+}
+
+exports.getUsers = function (req, res) {
+  const params = req.query.query;
+  const json = JSON.parse(params);
+  const pagination = json.pagination;
+  const sorter = json.sorter;
+  const filters = json.filters;
+  db.pageQuery(pagination, User, '', filters, sorter, function (err, result) {
+    response(req, res, err, function () {
       return {
         message: '查询职员列表信息成功',
         data: {
-          users
+          users: result.results,
+          pagination: result.pagination
         }
       }
-    }, function() {
+    }, function () {
       return {
-        message: '查询职员列表信息失败',
+        message: err.toString(),
       }
     });
-  });
+  })
 };
 
-exports.getUser = function(req, res) {
-  User.find(req.params, function(err, user) {
-    response(req, res, err, function() {
+exports.getUser = function (req, res) {
+  User.findById(req.params, function (err, user) {
+    response(req, res, err, function () {
       return {
         message: '查询职员信息成功',
         data: {
           user
         }
       }
-    }, function() {
+    }, function () {
       return {
-        message: '查询职员信息失败',
+        message: err.toString(),
       }
     });
   });
 };
 
-exports.deleteUser = function(req, res) {
-  User.remove(req.params, function(err) {
-    response(req, res, err, function() {
+exports.deleteUser = function (req, res) {
+  User.remove(req.params, function (err) {
+    response(req, res, err, function () {
       return {
         message: '删除职员信息成功',
       }
-    }, function() {
+    }, function () {
       return {
-        message: '删除职员信息失败',
+        message: err.toString(),
       }
     });
   });
 };
 
-exports.updateUser = function(req, res) {
-  User.update(req.body, function(err) {
-    response(req, res, err, function() {
-      return {
-        message: '更新职员信息成功',
-      }
-    }, function() {
-      return {
-        message: '更新职员信息失败',
-      }
-    });
-  });
+exports.updateUser = function (req, res) {
+  const data = req.body;
+  delete data._id;
+  User.findById(req.params, function (err, user) {
+    if (err) error(req, res, { message: err.toString })
+    for (key in data) {
+      user[key] = data[key];
+    }
+    user.save(function (err) {
+      response(req, res, err, function () {
+        return {
+          message: '更新职员信息成功',
+        }
+      }, function () {
+        return {
+          message: err.toString()
+        }
+      });
+    })
+  })
 };
 
-exports.test = function(req, res) {
+exports.test = function (req, res) {
   zentao.createUser({
-      dept: 1,
-      gender: 'f',
-      account: 2323,
-      realname: 2323,
-      password1: 123456,
-      password2: 123456,
-      verifyPassword: 123456,
-    }, function(data, err) {
-      if (err) console.log(err);
-      console.log(data)
+    dept: 1,
+    gender: 'f',
+    account: 2323,
+    realname: 2323,
+    password1: 123456,
+    password2: 123456,
+    verifyPassword: 123456,
+  }, function (data, err) {
+    if (err) console.log(err);
+    console.log(data)
   });
 }

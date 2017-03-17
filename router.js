@@ -17,7 +17,7 @@ module.exports = function(router, authController) {
 
   router.route('/users/:_id')
     .get(userController.getUser)
-    .patch(userController.updateUser)
+    .put(userController.updateUser)
     ['delete'](userController.deleteUser);
 
   router.route('/test')

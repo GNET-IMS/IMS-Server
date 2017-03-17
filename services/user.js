@@ -1,42 +1,39 @@
-var { response, error } = require ('../response');
-var gitlab = require ('../services/gitlab');
-var zentao = require ('../services/zentao');
-var User = require ('../models/user');
+var { response, error } = require('../response');
+var gitlab = require('../services/gitlab');
+var zentao = require('../services/zentao');
+var db = require('../services/db');
+var User = require('../models/user');
 
-const save = (data, callback) => {
-	var user = new User({
-    username: data.username,
-    password: data.password,
-    sex: data.sex,
-    email: data.email,
+var createOtherAccount = function(data) {
+  console.log(data)
+  gitlab.createUser({
     name: data.name,
-    birthday: data.birthday,
-    department: data.department,
-    title: data.title,
-    avatar_url: data.avatar_url,
-    is_admin: data.is_admin,
-    created_at: moment().format('YYYY-MM-DD hh:mm:ss'),
+    username: data.username,
+    password: 123456,
+    email: data.email,
+  }, function (result) {
+    if (result) console.log(`[gitlab][success]创建gitlab账号, 请查看你的邮箱`);
   });
 
-  user.save(callback);
+  zentao.createUser({
+    dept: 1,
+    gender: data.sex === '0' ? 'm' : 'f',
+    account: data.username,
+    realname: data.name,
+    password1: 123456,
+    password2: 123456,
+    verifyPassword: 123456,
+  }, function (result, err) {
+    if (err) console.log(`[zentao][error]:${err}`)
+    else console.log(`[zentao][success]:${result}`)
+  });
 }
 
-const batchSave = (data, callback) => {
-	let successFlag = 0;
-	let failFlag = 0;
-	for (let item of data) {
-		save(item, (err) => {
-			if (!err) {
-				successFlag ++;
-			} else {
-				failFlag ++;
-			}
-			if (successFlag + failFlag == data.length) callback(successFlag == data.length);
-		});
-	}
+exports.batchCreateOtherAccount = function(data) {
+  console.log(data)
+  for (let item of data) {
+    createOtherAccount(item);
+  }
 }
 
-exports = {
-	save,
-	batchSave
-}
+exports.createOtherAccount = createOtherAccount;

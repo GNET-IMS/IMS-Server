@@ -44,6 +44,14 @@ app.use(session({
   resave: true
 }));
 
+app.all('*', function(req, res, next) {  
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, PATCH, OPTIONS'); 
+    if(req.method=="OPTIONS") res.send(200);/*让options请求快速返回*/
+    else  next();
+});  
+
 // Use the passport package in our application
 app.use(passport.initialize());
 
