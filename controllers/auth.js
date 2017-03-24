@@ -1,5 +1,6 @@
 // Load required packages
 var passport = require('passport');
+var request = require('request');
 var LocalStrategy = require('passport-local').Strategy;
 var BasicStrategy = require('passport-http').BasicStrategy;
 var BearerStrategy = require('passport-http-bearer').Strategy;
@@ -7,6 +8,9 @@ var ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy
 var User = require('../models/user');
 var Client = require('../models/client');
 var Token = require('../models/token');
+var db = require('../db');
+var config = require('../app.cfg')
+
 
 /**
  * LocalStrategy
@@ -15,27 +19,37 @@ var Token = require('../models/token');
  * Anytime a request is made to authorize an application, we must ensure that
  * a user is logged in before asking them to approve the request.
  */
-passport.use(new LocalStrategy(
-  function(username, password, callback) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return callback(err); }
-
-      // No user found with that username
-      if (!user) { return callback(null, false); }
-
-      // Make sure the password is correct
-      user.verifyPassword(password, function(err, isMatch) {
-        if (err) { return callback(err); }
-
-        // Password did not match
-        if (!isMatch) { return callback(null, false); }
-
-        // Success
-        return callback(null, user);
-      });
-    });
-  }
-));
+passport.use(new LocalStrategy((username, password, callback) => {
+  const basicAuth = new Buffer(`${config.client.clientID}:${config.client.clientSecret}`).toString('base64');
+  request.post('https://localhost:3000/oauth/token', {
+    form: {
+      username,
+      password,
+      grant_type: 'password',
+      scope: 'offline-access',
+    },
+    headers: {
+      Authorization: `Basic ${basicAuth}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  }, (error, response, body) => {
+    console.log(error, response, body)
+    const { access_token, refresh_token, expires_in } = JSON.parse(body);
+    if (response.statusCode === 200 && access_token) {
+      // TODO: scopes
+      const expirationDate = expires_in ? new Date(Date.now() + (expires_in * 1000)) : null;
+      db.accessTokens.save(access_token, expirationDate, config.client.clientID)
+        .then(() => {
+          if (refresh_token != null) {
+            return db.refreshTokens.save(refresh_token, config.client.clientID);
+          }
+          return Promise.resolve();
+        })
+        .then(done(null, { accessToken: access_token, refreshToken: refresh_token }))
+        .catch(() => done(null, false));
+    }
+  });
+}));
 
 /**
  * BasicStrategy & ClientPasswordStrategy
@@ -49,7 +63,7 @@ passport.use(new LocalStrategy(
  * the specification, in practice it is quite common.
  */
 passport.use(new BasicStrategy(
-  function(username, password, callback) {
+  function (username, password, callback) {
     Client.findOne({ id: username }, function (err, client) {
       if (err) { return callback(err); }
 
@@ -63,8 +77,8 @@ passport.use(new BasicStrategy(
 ));
 
 passport.use(new ClientPasswordStrategy(
-  function(clientId, clientSecret, done) {
-    Client.findOne({ id: clientId }, function(err, client) {
+  function (clientId, clientSecret, done) {
+    Client.findOne({ id: clientId }, function (err, client) {
       if (err) { return done(err); }
       if (!client) { return done(null, false); }
       if (client.secret != secret) { return done(null, false); }
@@ -73,52 +87,24 @@ passport.use(new ClientPasswordStrategy(
   }
 ));
 
-passport.use(new BearerStrategy(
-  function(accessToken, callback) {
-    Token.findOne({value: accessToken }, function (err, token) {
-      if (err) { return callback(err); }
+passport.use(new BearerStrategy((accessToken, done) => {
+  db.accessTokens.find(accessToken)
+  .then(token => validate.token(token, accessToken))
+  .then(token => done(null, token, { scope: '*' }))
+  .catch(() => done(null, false));
+}));
 
-      // No token found
-      if (!token) { return callback(null, false); }
-
-      if (token.userId) {
-        User.findOne({ _id: token.userId }, function (err, user) {
-          if (err) { return callback(err); }
-
-          // No user found
-          if (!user) { return callback(null, false); }
-
-          // Simple example with no scope
-          callback(null, user, { scope: '*' });
-        });
-      } else {
-        Client.findOne({ id: token.clientId }, function (err, client) {
-          if (err) { return callback(err); }
-
-          // No client found
-          if (!client) { return callback(null, false); }
-
-          // to keep this example simple, restricted scopes are not implemented,
-          // and this is just for illustrative purposes
-          var info = { scope: token.scope, expiration: token.expiration }
-          callback(null, client, info);
-        });
-      }
-    });
-  }
-));
-
-var isAuthenticated = passport.authenticate(['local', 'bearer'], { session : false });
+var isAuthenticated = passport.authenticate(['local', 'bearer'], { session: false });
 exports.isAuthenticated = isAuthenticated;
-exports.isClientAuthenticated = passport.authenticate('basic', { session : false });
+exports.isClientAuthenticated = passport.authenticate('basic', { session: false });
 exports.isBearerAuthenticated = passport.authenticate('bearer', { session: false });
 
 exports.isAppAuthenticated = [
   isAuthenticated,
-  function(req, res, next) {
-    if ( req.authInfo.expiration < new Date().getTime() ) {
+  function (req, res, next) {
+    if (req.authInfo.expiration < new Date().getTime()) {
       res.sendStatus(401);
-    } else if ( !req.authInfo || !req.authInfo.scope || req.authInfo.scope !== '*' && req.authInfo.scope.indexOf(scope) == -1 ) {
+    } else if (!req.authInfo || !req.authInfo.scope || req.authInfo.scope !== '*' && req.authInfo.scope.indexOf(scope) == -1) {
       res.sendStatus(403);
     } else {
       next();

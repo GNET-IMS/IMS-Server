@@ -19,6 +19,7 @@ var authController = require('./controllers/auth');
 var oauth2Controller = require('./controllers/oauth2');
 var clientController = require('./controllers/client');
 var appRouter = require('./router');
+var login = require('./controllers/login');
 
 var app = express();
 
@@ -67,14 +68,10 @@ router.route('/clients')
   .post(authController.isAuthenticated, clientController.postClients)
   .get(authController.isAuthenticated, clientController.getClients);
 
-router.route('/login')
-  .post(authController.isAuthenticated, clientController.postClients)
-  .get(authController.isAuthenticated, clientController.getClients);
-
 // Create endpoint handlers for oauth2 authorize
 router.route('/oauth2/authorize')
-  .get(authController.isAuthenticated, oauth2Controller.authorization)
-  .post(authController.isAuthenticated, oauth2Controller.decision);
+  .get(authController.isClientAuthenticated, oauth2Controller.authorization)
+  .post(authController.isClientAuthenticated, oauth2Controller.decision);
 
 // Create endpoint handlers for oauth2 token
 router.route('/oauth2/token')
@@ -89,6 +86,12 @@ log.use(app);
 // Register all our routes with /api
 app.use('/api', router);
 
+var loginRouter = express.Router();
+loginRouter.route('/login')
+  .post(authController.isAuthenticated, login.getin)
+
+app.use('', loginRouter);
+
 // Handle 404
 app.use(function(req, res) {
     res.status(404).json({ message: '亲，您是不是迷路了？' });
@@ -96,6 +99,6 @@ app.use(function(req, res) {
 
 // Handle 500
 app.use(function(error, req, res, next) {
-    res.status(500).json({ message: '亲，不好的消息哦！' });
+    res.status(500).json({ message: '亲，不好的消息哦！', error });
 });
 module.exports = app;

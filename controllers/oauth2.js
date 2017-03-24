@@ -255,10 +255,11 @@ server.exchange(oauth2orize.exchange.refreshToken(function(client, refreshToken,
 // first, and rendering the `dialog` view.
 
 exports.authorization = [
-  server.authorization(function(clientId, redirectUri, callback) {
-    console.log(clientId, redirectUri, 123)
+  server.authorization(function(clientId, redirectUri, scope, callback) {
     Client.findOne({ id: clientId }, function (err, client) {
       if (err) { return callback(err); }
+
+      client.scope = scope;
 
       return callback(null, client, redirectUri);
     });
@@ -326,4 +327,3 @@ function uid (len) {
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-

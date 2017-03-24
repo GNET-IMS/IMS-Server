@@ -1,8 +1,9 @@
 // Load required packages
-var { response, error } = require('../response');
+var { response, error, success } = require('../response');
 var gitlab = require('../services/gitlab');
 var zentao = require('../services/zentao');
 var db = require('../services/db');
+var file = require('../services/file');
 var User = require('../models/user');
 var moment = require('moment');
 var encryption = require('../services/encryption');
@@ -12,7 +13,7 @@ var userServices = require('../services/user');
 exports.postUsers = function (req, res) {
   var data = req.body;
   if (data instanceof Array) {
-      batchSave(data, req, res);
+    batchSave(data, req, res);
   } else {
     var user = new User({
       username: data.username,
@@ -53,7 +54,7 @@ var batchSave = function (data, req, res) {
   })
   User.collection.insert(users, function (err, docs) {
     response(req, res, err, function () {
-    userServices.batchCreateOtherAccount(users);
+      userServices.batchCreateOtherAccount(users);
       return {
         message: '创建职员成功',
       }
@@ -68,7 +69,7 @@ var batchSave = function (data, req, res) {
 
 exports.getUsers = function (req, res) {
   const params = req.query.query;
-  const json = JSON.parse(params);
+  const json = params && JSON.parse(params) || {};
   const pagination = json.pagination;
   const sorter = json.sorter;
   const filters = json.filters;
@@ -124,7 +125,7 @@ exports.updateUser = function (req, res) {
   const data = req.body;
   delete data._id;
   User.findById(req.params, function (err, user) {
-    if (err) error(req, res, { message: err.toString })
+    if (err) error(res, { message: err.toString })
     for (key in data) {
       user[key] = data[key];
     }
@@ -135,12 +136,33 @@ exports.updateUser = function (req, res) {
         }
       }, function () {
         return {
-          message: err.toString()
+          message: err.toString() 
         }
       });
     })
   })
 };
+
+exports.uploadPhoto = function (req, res) {
+  file.uploadImage(req, {
+    uploadDir: './public/images/photo/'
+  }, function(url) {
+    const avatar_url = url.split('./public')[1];
+    User.update(req.params, {avatar_url}, function(err, docs) {
+      if (err) error(res, {message: err.toString()});
+      success(res, {
+        message: '上传成功',
+        data: {
+          photo: avatar_url
+        }
+      })
+    })
+  }, function(message) {
+    error(res, {
+      message
+    })
+  })
+}
 
 exports.test = function (req, res) {
   zentao.createUser({

@@ -1,6 +1,6 @@
 var logger = require('../log').logger;
 
-exports.error = function(req, res, obj) {
+exports.error = function(res, obj) {
   var errorid = uid(64);
   recordErrorLog(errorid, obj.message);
   res.status(obj.status || 500);
@@ -9,7 +9,7 @@ exports.error = function(req, res, obj) {
 
 exports.success = function(res, obj) {
   res.status(obj.status || 200);
-  res.json(createResult(errorid, obj));
+  res.json(createResult(undefined, obj));
 }
 
 exports.response = function(req, res, err, successCallback, failureCallback) {
