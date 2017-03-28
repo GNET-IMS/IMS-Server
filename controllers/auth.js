@@ -9,7 +9,8 @@ var User = require('../models/user');
 var Client = require('../models/client');
 var Token = require('../models/token');
 var db = require('../db');
-var config = require('../app.cfg')
+var config = require('../app.cfg');
+var validate = require('../validate');
 
 
 /**
@@ -33,7 +34,6 @@ passport.use(new LocalStrategy((username, password, callback) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   }, (error, response, body) => {
-    console.log(error, response, body)
     const { access_token, refresh_token, expires_in } = JSON.parse(body);
     if (response.statusCode === 200 && access_token) {
       // TODO: scopes

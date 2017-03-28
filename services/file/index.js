@@ -9,7 +9,6 @@ var fs = require('fs');
 		form.maxFieldsSize = option.maxFieldsSize || 2 * 1024 * 1024;   //文件大小
 		form.parse(req, function (err, fields, files) {
 			var extName = '';  //后缀名
-			console.log(files)
 			switch (files.avatar.type) {
 				case 'image/pjpeg':
 					extName = 'jpg';

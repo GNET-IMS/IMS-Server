@@ -1,4 +1,4 @@
-var userController = require('./controllers/user');
+import userController from './controllers/user';
 
 // 'POST /api/accounts'  添加一个账号
 // 'GET /api/accounts/:id' 根据id获得某个账号
@@ -22,7 +22,4 @@ module.exports = function(router, authController) {
 
   router.route('/users/:_id/upload')
     .post(userController.uploadPhoto)
-
-  router.route('/test')
-    .get(userController.test)
 }

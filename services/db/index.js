@@ -2,15 +2,33 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var async = require('async');
 
-exports.pageQuery = function (pagination={current: 1, pageSize: 10}, Model, populate='', queryParams={}, sorter={"_id": 'desc'}, callback) {
-    var current = pagination.current;
-    var pageSize = pagination.pageSize;
-    var start = (current - 1) * pageSize;
-    console.log(queryParams)
-    for (var i in queryParams) {
+exports.pageQuery = function (query, Model, populate = '', callback) {
+    let pagination = { current: 1, pageSize: 10 };
+    let queryParams = {}
+    let sorter = { "_id": 'desc' };
+    let sorterField;
+    let order;
+
+    for (let key in query) {
+        if (key === 'current' || key === 'pageSize') {
+            pagination[key] = +query[key];
+        } else if (key === 'order' || key === 'sorter') {
+            if (key === 'sorter') sorterField = query[key];
+            if (key === 'order') order = query[key]
+        } else {
+            queryParams[key] = new RegExp(query[key]);
+        }
+    }
+
+    if (sorterField && order) sorter = { [sorterField]: order};
+
+    const current = pagination.current;
+    const pageSize = pagination.pageSize;
+    const start = (current - 1) * pageSize;
+    for (let i in queryParams) {
         if (!queryParams[i]) delete queryParams[i];
     }
-    var $page = {
+    let $page = {
         pagination
     };
     async.parallel({
@@ -25,7 +43,7 @@ exports.pageQuery = function (pagination={current: 1, pageSize: 10}, Model, popu
             });
         }
     }, function (err, results) {
-        var count = results.count;
+        const count = results.count;
         $page.pagination.total = count;
         $page.results = results.records;
         callback(err, $page);

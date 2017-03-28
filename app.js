@@ -1,27 +1,25 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-//var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 mongoose.Promise = Promise;
-var session = require('express-session');
-var passport = require('passport');
-var log = require('./log');
+import session from 'express-session';
+import passport from 'passport';
+import log from './log';
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var bodyParser = require('body-parser');
+import index from './routes/index';
+import users from './routes/users';
 
-var userController = require('./controllers/user');
-var authController = require('./controllers/auth');
-var oauth2Controller = require('./controllers/oauth2');
-var clientController = require('./controllers/client');
-var appRouter = require('./router');
-var login = require('./controllers/login');
+import userController from './controllers/user';
+import authController from './controllers/auth';
+import oauth2Controller from './controllers/oauth2';
+import clientController from './controllers/client';
+import appRouter from './router';
+import login from './controllers/login';
 
-var app = express();
+const app = express();
 
 // Connect to the vipshare MongoDB
 mongoose.connect('mongodb://localhost:27017/IMS');
@@ -43,25 +41,18 @@ app.use(session({
   secret: 'Super Secret Session Key',
   saveUninitialized: true,
   resave: true
-}));
-
-app.all('*', function(req, res, next) {  
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, PATCH, OPTIONS'); 
-    if(req.method=="OPTIONS") res.send(200);/*让options请求快速返回*/
-    else  next();
-});  
+}));  
 
 // Use the passport package in our application
 app.use(passport.initialize());
 
 // Create our Express router
-var router = express.Router();
+const router = express.Router();
+
 // Create endpoint handlers for /users
 router.route('/users')
   .post(userController.postUsers)
-  .get(userController.getUsers)
+  .get(authController.isBearerAuthenticated, userController.getUsers)
 
 // Create endpoint handlers for /clients
 router.route('/clients')
@@ -86,7 +77,7 @@ log.use(app);
 // Register all our routes with /api
 app.use('/api', router);
 
-var loginRouter = express.Router();
+const loginRouter = express.Router();
 loginRouter.route('/login')
   .post(authController.isAuthenticated, login.getin)
 
