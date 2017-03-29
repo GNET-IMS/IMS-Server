@@ -122,7 +122,7 @@ const updateUser = (req, res) => {
   delete data._id;
   User.findById(req.params, (err, user) => {
     if (err) error(res, { message: err.toString })
-    for (key in data) {
+    for (let key in data) {
       user[key] = data[key];
     }
     user.save ((err) => {

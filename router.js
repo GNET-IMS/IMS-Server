@@ -16,10 +16,10 @@ module.exports = function(router, authController) {
   //   .delete(authController.isAppAuthenticated, accountController.deleteAccount);
 
   router.route('/users/:_id')
-    .get(userController.getUser)
-    .put(userController.updateUser)
-    ['delete'](userController.deleteUser);
+    .get(authController.isBearerAuthenticated, userController.getUser)
+    .put(authController.isBearerAuthenticated, userController.updateUser)
+    ['delete'](authController.isBearerAuthenticated, userController.deleteUser);
 
   router.route('/users/:_id/upload')
-    .post(userController.uploadPhoto)
+    .post(authController.isBearerAuthenticated, userController.uploadPhoto)
 }

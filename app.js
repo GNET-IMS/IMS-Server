@@ -51,7 +51,7 @@ const router = express.Router();
 
 // Create endpoint handlers for /users
 router.route('/users')
-  .post(userController.postUsers)
+  .post(authController.isBearerAuthenticated, userController.postUsers)
   .get(authController.isBearerAuthenticated, userController.getUsers)
 
 // Create endpoint handlers for /clients
