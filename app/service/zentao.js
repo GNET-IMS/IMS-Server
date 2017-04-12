@@ -20,7 +20,7 @@ module.exports = app => {
                     password: '123456'
                 },
                 headers: {
-                    'Cookie': session + '111'
+                    'Cookie': session
                 },
                 dataType: 'json'
             })
@@ -48,15 +48,18 @@ module.exports = app => {
                     verifyPassword: 123456,
                 },
                 headers: {
-                    'Cookie': session + '11'
+                    'Cookie': session
                 },
                 dataType: 'string'
             })
             const dataStr = result.data.toString();
+            console.log(dataStr)
             if (dataStr.indexOf('parent.location=') >= 0) {
                 return true;
+            } else if (dataStr.indexOf('self.location=') >= 0) {
+                throw new Error('[zentao error] session验证失败');
             } else {
-                const errorMessage = res.text.split('alert(\'')[1].split('\\n\')')[0];
+                const errorMessage = dataStr.split('alert(\'')[1].split('\\n\')')[0];
                 throw new Error(errorMessage);
             }
         }

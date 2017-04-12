@@ -2,7 +2,7 @@
 
 //app.isBearerAuthenticated()
 module.exports = app => {
-  app.resources('users', '/api/users', 'users');
+  app.resources('users', '/api/users', app.isBearerAuthenticated(), 'users');
   app.post('/api/users/:id/upload', 'users.uploadPhoto');
   
 };

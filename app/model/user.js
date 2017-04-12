@@ -16,7 +16,6 @@ module.exports = mongoose => {
     created_at: { type: String, required: true },
   });
 
-
   // Execute before each user.save() call
   UserSchema.pre('save', function (callback) {
     var user = this;

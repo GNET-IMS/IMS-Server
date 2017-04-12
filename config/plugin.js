@@ -21,5 +21,10 @@ exports.passport = {
   package: 'egg-passport',
 };
 
+exports.cors = {
+  enable: true,
+  package: 'egg-cors',
+};
+
 // had enabled by egg
 // exports.static = true;

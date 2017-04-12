@@ -1,7 +1,6 @@
 // 定义创建接口的请求参数规则
 const createRule = {
 	username: 'string',
-	password: 'string',
 	sex: { type: 'number', required: false },
 	email: { type: 'string', required: false },
 	name: 'string',
@@ -27,26 +26,40 @@ module.exports = app => {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
 			const user = await service.user.find(id);
-			ctx.body = user;
+			ctx.body = {
+				user
+			};
 			ctx.status = 200;
 		}
 		async create() {
 			const { ctx, service } = this;
 			// 校验参数
-			ctx.validate(createRule);
+			ctx.validate(Object.assign(createRule, {
+				password: { type: 'string' },
+			}));
 			const user = await service.user.create(ctx.request.body);
 			const gitlab = await service.gitlab.create(user);
 			const zentao = await service.zentao.create(user);
-			ctx.body = user;
+			ctx.body = {
+				user
+			};
 			ctx.status = 201;
 		}
 		async update() {
 			const { ctx, service } = this;
-			ctx.validate(createRule);
+			let rule = createRule;
+			if (ctx.request.body.password) {
+				rule = Object.assign(createRule, {
+					password: { type: 'string' },
+				})
+			}
+			ctx.validate(rule);
 			let user = ctx.request.body;
 			user._id = ctx.params.id;
 			const id = await service.user.update(ctx.request.body);
-			ctx.body = id;
+			ctx.body = {
+				id
+			};
 			ctx.status = 200;
 		}
 		async destroy() {
@@ -64,7 +77,9 @@ module.exports = app => {
 			console.log(url, '123')
 			const id = await service.update({_id: ctx.params.id, avatar_url})
 			console.log(id);
-			ctx.body = id;
+			ctx.body = {
+				id
+			};
 			ctx.status = 200;
 		}
 	}

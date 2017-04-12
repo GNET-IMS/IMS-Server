@@ -10,6 +10,10 @@ module.exports = appInfo => {
       match: '/api',
     },
 
+    cors: {
+      allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
+    },
+
     keys: appInfo.name + '_1490928873243_4696',
 
     mongoose: {
@@ -25,7 +29,8 @@ module.exports = appInfo => {
     // },
 
     security: {
-      csrf: false
+      csrf: false,
+      domainWhiteList: [ 'http://localhost:8080', 'http://localhost:7001' ],
     },
   };
 

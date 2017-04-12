@@ -20,7 +20,7 @@ module.exports = app => {
     async remove(id) {
       const doc = await this.ctx.model.user.remove({_id: id});
       if (doc.result.ok) {
-        if (doc.n) return true;
+        if (doc.result.n) return true;
         throw new Error('该用户不存在');
       }
     }

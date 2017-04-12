@@ -1,5 +1,5 @@
 module.exports = {
-  isBearerAuthenticated() {
-    return this.passport.authenticate('bearer', { session: false });
+  isBearerAuthenticated(options = { session: false }) {
+    return this.passport.authenticate('bearer', options);
   }
 };
