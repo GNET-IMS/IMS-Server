@@ -18,7 +18,6 @@ module.exports = appInfo => {
 
     mongoose: {
       url: 'mongodb://localhost:27017/IMS',
-      options: {}
     },
 
     // view: {
@@ -30,7 +29,7 @@ module.exports = appInfo => {
 
     security: {
       csrf: false,
-      domainWhiteList: [ 'http://localhost:8080', 'http://localhost:7001' ],
+      domainWhiteList: [ 'http://localhost:8080' ],
     },
   };
 

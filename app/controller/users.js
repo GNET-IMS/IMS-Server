@@ -1,3 +1,4 @@
+const path = require('path');
 // 定义创建接口的请求参数规则
 const createRule = {
 	username: 'string',
@@ -71,14 +72,12 @@ module.exports = app => {
 		async uploadPhoto() {
 			const { ctx, service } = this;
 			const url = await ctx.helper.uploadImage(ctx.req, {
-				uploadDir: './public/images/photo/',
+				uploadDir: path.join(__dirname, `../public/images/photo/`),
 			});
-			const avatar_url = url.split('./public')[1];
-			console.log(url, '123')
-			const id = await service.update({_id: ctx.params.id, avatar_url})
-			console.log(id);
+			const avatar_url = url.split('\\app')[1];
+			const user = await service.user.update({_id: ctx.params.id, avatar_url })
 			ctx.body = {
-				id
+				user
 			};
 			ctx.status = 200;
 		}

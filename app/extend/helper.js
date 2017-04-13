@@ -1,6 +1,7 @@
 // app/extend/helper.js
 const moment = require('moment');
 const async = require('async');
+const fs = require('fs');
 const formidable = require('formidable');
 
 module.exports = {
@@ -71,7 +72,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       const form = new formidable.IncomingForm();   //创建上传表单
       form.encoding = option.encoding || 'utf-8';        //设置编辑
-      form.uploadDir = option.uploadDir || './public/images/photo/';     //设置上传目录
+      form.uploadDir = option.uploadDir || '/public/images/photo/';     //设置上传目录
       form.keepExtensions = option.keepExtensions || true;     //保留后缀
       form.maxFieldsSize = option.maxFieldsSize || 2 * 1024 * 1024;   //文件大小
       form.parse(req, (err, fields, files) => {
