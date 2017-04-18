@@ -3,6 +3,7 @@ const moment = require('moment');
 const async = require('async');
 const fs = require('fs');
 const formidable = require('formidable');
+const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
   foo(param) {
@@ -27,8 +28,12 @@ module.exports = {
         } else if (key === 'order' || key === 'sorter') {
           if (key === 'sorter') sorterField = query[key];
           if (key === 'order') order = query[key]
-        } else {
-          queryParams[key] = new RegExp(query[key]);
+        } else { 
+          if (Model.schema.obj[key].type.schemaName === 'ObjectId') {
+            queryParams[key] = query[key];
+          } else {
+            queryParams[key] = new RegExp(query[key]);
+          }
         }
       }
 

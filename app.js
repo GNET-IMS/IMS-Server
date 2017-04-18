@@ -3,6 +3,9 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 
 // app.js
 module.exports = app => {
+  require('./app/lib/mongoose')(app);
+
+  
   app.passport.use(new BearerStrategy({ passReqToCallback: true }, async (req, accessToken, done) => {
     const resp = await req.ctx.curl(`https://localhost:3000/api/tokeninfo?access_token=${accessToken}`, {
       credentials: 'include',

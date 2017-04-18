@@ -26,7 +26,7 @@ module.exports = app => {
             })
             const data = result.data;
             if (data.status !== 'success') {
-                throw new Error(`[zentao error] ${data.reason}`);
+                throw this.ctx.error(`[zentao error] ${data.reason}`);
             }
             return data.user;
         }
@@ -34,7 +34,7 @@ module.exports = app => {
             const session = await this.getSession();
             const user = await this.login();
         }
-        async create(user) {
+        async create(user, creator) {
             await this.init();
             const result = await app.curl(`${url}/user-create-1.json`, {
                 method: 'POST',
@@ -53,14 +53,26 @@ module.exports = app => {
                 dataType: 'string'
             })
             const dataStr = result.data.toString();
-            console.log(dataStr)
             if (dataStr.indexOf('parent.location=') >= 0) {
+                this.ctx.message({
+                    type: 'success',
+                    title: '禅道',
+                    content: `用户：${user.username}的禅道账号创建成功， 默认账号为当前账号，密码为：123456`,
+                }, creator);
                 return true;
             } else if (dataStr.indexOf('self.location=') >= 0) {
-                throw new Error('[zentao error] session验证失败');
+                this.ctx.message({
+                    type: 'error',
+                    title: '禅道',
+                    content: `session验证失败`,
+                }, creator);
             } else {
                 const errorMessage = dataStr.split('alert(\'')[1].split('\\n\')')[0];
-                throw new Error(errorMessage);
+                this.ctx.message({
+                    type: 'error',
+                    title: '禅道',
+                    content: errorMessage,
+                }, creator);
             }
         }
     }
