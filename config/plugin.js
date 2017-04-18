@@ -6,7 +6,7 @@
 // };
 
 exports.mongoose = {
-  enable: true,
+  enable: false,
   package: 'egg-mongoose',
 };
 
@@ -24,6 +24,11 @@ exports.passport = {
 exports.cors = {
   enable: true,
   package: 'egg-cors',
+};
+
+exports.io = {
+  enable: true,
+  package: 'egg-socket.io',
 };
 
 // had enabled by egg

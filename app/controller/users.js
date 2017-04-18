@@ -1,3 +1,4 @@
+const path = require('path');
 // 定义创建接口的请求参数规则
 const createRule = {
 	username: 'string',
@@ -33,16 +34,41 @@ module.exports = app => {
 		}
 		async create() {
 			const { ctx, service } = this;
-			// 校验参数
-			ctx.validate(Object.assign(createRule, {
-				password: { type: 'string' },
-			}));
-			const user = await service.user.create(ctx.request.body);
-			const gitlab = await service.gitlab.create(user);
-			const zentao = await service.zentao.create(user);
+			const data = ctx.request.body;
+			const target = data.target;
+			if (Array.isArray(target)) {
+				await this.batchCreate();
+				return false;
+			} else {
+				// 校验参数
+				ctx.validate(Object.assign(createRule, {
+					password: { type: 'string' },
+				}), target);
+				const user = await service.user.create(target);
+				service.zentao.create(user, data.creator);
+				service.gitlab.create(user, data.creator);
+				ctx.body = {
+					user
+				};
+				ctx.status = 201;
+			}
+		}
+		async batchCreate() {
+			const { ctx, service } = this;
+			const data = ctx.request.body;
+			const target = data.target;
+			target.forEach(item => {
+				ctx.validate({
+					name: 'string',
+					username: 'string',
+					password: 'string',
+					department: 'string',
+				}, item)
+			})
+			const result = await service.user.batchCreate(target);
 			ctx.body = {
-				user
-			};
+				result
+			}
 			ctx.status = 201;
 		}
 		async update() {
@@ -65,20 +91,21 @@ module.exports = app => {
 		async destroy() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			await service.user.remove(id);
+			const result = await service.user.remove(id);
+			ctx.body = {
+				result
+			};
 			ctx.status = 200;
 		}
 		async uploadPhoto() {
 			const { ctx, service } = this;
 			const url = await ctx.helper.uploadImage(ctx.req, {
-				uploadDir: './public/images/photo/',
+				uploadDir: path.join(__dirname, `../public/images/photo/`),
 			});
-			const avatar_url = url.split('./public')[1];
-			console.log(url, '123')
-			const id = await service.update({_id: ctx.params.id, avatar_url})
-			console.log(id);
+			const avatar_url = url.split('\\app')[1];
+			const user = await service.user.update({ _id: ctx.params.id, avatar_url })
 			ctx.body = {
-				id
+				user
 			};
 			ctx.status = 200;
 		}
