@@ -1,0 +1,2 @@
+{"_id":{"$oid":"58f48cc96e36c06ad0ef06ac"},"is_read":true,"created_at":"2017-04-17 05:37:13","type":"success","title":"禅道","content":"用户：qidongshi的禅道账号创建成功， 默认账号为当前账号，密码为：123456","to":{"$oid":"58c7b1e697b7d7d6968bb7ff"},"__v":0}
+{"_id":{"$oid":"58f48e00bd4dad5150d77790"},"is_read":false,"created_at":"2017-04-17 05:42:24","type":"success","title":"禅道","content":"用户：12wenwen的禅道账号创建成功， 默认账号为当前账号，密码为：123456","__v":0}
