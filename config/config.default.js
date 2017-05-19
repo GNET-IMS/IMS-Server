@@ -16,21 +16,12 @@ module.exports = appInfo => {
 
     keys: appInfo.name + '_1490928873243_4696',
 
-    mongoose: [
-      {
-        name: 'IMS',
-        url: 'mongodb://localhost:27017/IMS',
-        options: {
-          promiseLibrary: Promise
-        }
-      }, {
-        name: 'authorization',
-        url: 'mongodb://localhost:27017/authorization',
-        options: {
-          promiseLibrary: Promise
-        }
+    mongoose: {
+      url: 'mongodb://localhost:27017/IMS',
+      options: {
+        promiseLibrary: Promise
       }
-    ],
+    },
 
     // view: {
     //   defaultViewEngine: 'ejs',
