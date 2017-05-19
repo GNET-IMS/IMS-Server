@@ -11,9 +11,9 @@
     "egg-passport": "^1.0.0",
     "egg-socket.io": "^1.2.0",
     "egg-validate": "^1.0.0",
-    "formidable": "^1.1.1",
-    "gitlab": "^1.7.1",
-    "moment": "^2.18.1"
+    "moment": "^2.18.1",
+    "node-uuid": "^1.4.8",
+    "stream-wormhole": "^1.0.3"
   },
   "devDependencies": {
     "autod": "^2.7.1",

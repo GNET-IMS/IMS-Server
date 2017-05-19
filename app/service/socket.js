@@ -24,6 +24,9 @@ module.exports = app => {
       const socket = await this.ctx.model.socket.findOne({ user_id: userId });
       return socket && socket.socket_id;
     }
+    async removeBySocketId(id) {
+      await this.ctx.model.socket.remove({socket_id: id});
+    }
   }
   return Socket;
 };

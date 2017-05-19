@@ -28,6 +28,10 @@ module.exports = app => {
       const doc = await this.ctx.model.message.update({ _id: id }, { is_read: true });
       return doc;
     }
+    async getUnreadNum(id) {
+      const count = await this.ctx.model.message.find({ to: id, is_read: false }).count();
+      return count;
+    }
   }
   return Message;
 };

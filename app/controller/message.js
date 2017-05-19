@@ -5,7 +5,7 @@ module.exports = app => {
 			const result = await service.message.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				messages: result.results
+				messages: result.records
 			};
 			ctx.status = 201;
 		}
@@ -33,6 +33,14 @@ module.exports = app => {
 			const message = await service.message.read(id);
 			ctx.body = {
 				message
+			};
+			ctx.status = 200;
+		}
+		async getUnreadNum() {
+			const { ctx, service } = this;
+			const unreadNum = await service.message.getUnreadNum();
+			ctx.body = {
+				unreadNum
 			};
 			ctx.status = 200;
 		}

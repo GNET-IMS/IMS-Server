@@ -35,6 +35,7 @@ module.exports = app => {
             const user = await this.login();
         }
         async create(user, creator) {
+            let message;
             await this.init();
             const result = await app.curl(`${url}/user-create-1.json`, {
                 method: 'POST',
@@ -54,26 +55,29 @@ module.exports = app => {
             })
             const dataStr = result.data.toString();
             if (dataStr.indexOf('parent.location=') >= 0) {
-                this.ctx.message({
+                message = {
                     type: 'success',
                     title: '禅道',
                     content: `用户：${user.username}的禅道账号创建成功， 默认账号为当前账号，密码为：123456`,
-                }, creator);
-                return true;
+                    to: creator
+                };
             } else if (dataStr.indexOf('self.location=') >= 0) {
-                this.ctx.message({
+                message = {
                     type: 'error',
                     title: '禅道',
                     content: `session验证失败`,
-                }, creator);
+                    to: creator
+                }
             } else {
-                const errorMessage = dataStr.split('alert(\'')[1].split('\\n\')')[0];
-                this.ctx.message({
+                message = {
                     type: 'error',
                     title: '禅道',
                     content: errorMessage,
-                }, creator);
+                    to: creator
+                }
             }
+            await this.service.message.create(message);
+            return message;
         }
     }
     return Zentao;

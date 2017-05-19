@@ -1,4 +1,7 @@
 const path = require('path');
+const fs = require('fs');
+const sendToWormhole = require('stream-wormhole');
+
 // 定义创建接口的请求参数规则
 const createRule = {
 	username: 'string',
@@ -19,7 +22,7 @@ module.exports = app => {
 			const result = await service.user.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				users: result.results
+				users: result.records
 			};
 			ctx.status = 201;
 		}
@@ -45,8 +48,7 @@ module.exports = app => {
 					password: { type: 'string' },
 				}), target);
 				const user = await service.user.create(target);
-				service.zentao.create(user, data.creator);
-				service.gitlab.create(user, data.creator);
+				service.user.createGitlabAndZentao(user, data.creator);
 				ctx.body = {
 					user
 				};
@@ -99,13 +101,41 @@ module.exports = app => {
 		}
 		async uploadPhoto() {
 			const { ctx, service } = this;
-			const url = await ctx.helper.uploadImage(ctx.req, {
-				uploadDir: path.join(__dirname, `../public/images/photo/`),
-			});
-			const avatar_url = url.split('\\app')[1];
-			const user = await service.user.update({ _id: ctx.params.id, avatar_url })
+			const stream = await ctx.getFileStream();
+			const filename = ctx.helper.changeFilename(stream.filename);
+			const name = path.resolve(`app/public/images/${filename}`);
+			try {
+				const writerStream = fs.createWriteStream(name);
+				stream.pipe(writerStream);
+			} catch (err) {
+				await sendToWormhole(stream);
+				throw err;
+			}
+			const user = await service.user.update({
+				_id: ctx.params.id,
+				avatar_url: `/public/images/${filename}`
+			})
+
 			ctx.body = {
 				user
+			};
+			ctx.status = 200;
+		}
+		async getByToken() {
+			const { ctx, service } = this;
+			const access_token = ctx.access_token;
+			const user = await service.accessToken.findUserByAccessToken(access_token);
+			ctx.body = {
+				user
+			};
+			ctx.status = 200;
+		}
+		async getUnreadMessageNum() {
+			const { ctx, service } = this;
+			const { id } = ctx.params;
+			const unreadNum = await service.message.getUnreadNum(id);
+			ctx.body = {
+				unreadNum
 			};
 			ctx.status = 200;
 		}
