@@ -20,43 +20,29 @@ module.exports = {
     error.code = code;
     return error;
   },
-
-  /**
-   * socket.io 发送给空户端消息
-   * @param {Object} info 
-   * info: {
-   *    type:  one of ['error', 'success', 'warn'] ,
-   *    title: String,
-   *    content: String,
-   * }
-   * @param {String} to 为空时表示发送给所有用户
-   * @param {String} from 为空时表示系统发送的消息
-   */
-  async message(info, to, from, save = true) {
+  async message(info, from, to) {
     const io = this.app.io;
-    let socket, message;
-    const data = {
-      from,
-      type: info.type,
-      title: info.title,
-      content: info.content,
-    }
-
-    if (to) {
-      if (save) {
-        message = await this.service.message.create(Object.assign(data, {
-          to
-        }));
-      }
-      const socketId = await this.service.socket.getSocketId(to);
-      socket = io.sockets.sockets[socketId] && io.sockets.sockets[socketId].nsp;
-    } else {
-      if (save) {
-        message = await this.service.message.create(data);
-      }
-      socket = io;
-    }
+    await this.service.notice.createMessage(info.content, from, to)
+    const socketId = await this.service.socket.getSocketId(to);
+    socket = io.sockets.sockets[socketId];
 
     socket.emit('message_response', info)
+  },
+
+  async reminder(info, to, save = true) {
+    const io = this.app.io;
+    let socket, message;
+    if (save) {
+      await this.service.notice.createReminder(info.content, to)
+    }
+    const socketId = await this.service.socket.getSocketId(to);
+    socket = io.sockets.sockets[socketId];
+
+    socket.emit('message_response', info)
+  },
+  async announcement(info, from) {
+    const io = this.app.io;
+    await this.service.message.createAnnouncement(info.content, from);
+    io.emit('message_response', info)
   }
 };

@@ -1,49 +1,41 @@
 module.exports = app => {
-	class MessagesController extends app.Controller {
+	class AnnouncementsController extends app.Controller {
 		async index() {
 			const { ctx, service } = this;
-			const result = await service.message.search(ctx.query);
+			const result = await service.announcement.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				messages: result.records
+				announcements: result.records
 			};
 			ctx.status = 201;
 		}
 		async show() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const message = await service.message.find(id);
+			const announcement = await service.announcement.find(id);
 			ctx.body = {
-				message
+				announcement
 			};
 			ctx.status = 200;
 		}
 		async destroy() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const result = await service.message.remove(id);
+			const result = await service.announcement.remove(id);
 			ctx.body = {
 				result
 			};
 			ctx.status = 200;
 		}
-		async read() {
+		async update() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const message = await service.message.read(id);
+			const result = await service.announcement.update(id);
 			ctx.body = {
-				message
-			};
-			ctx.status = 200;
-		}
-		async getUnreadNum() {
-			const { ctx, service } = this;
-			const unreadNum = await service.message.getUnreadNum();
-			ctx.body = {
-				unreadNum
+				result
 			};
 			ctx.status = 200;
 		}
 	}
-	return MessagesController;
+	return AnnouncementsController;
 }

@@ -76,7 +76,7 @@ module.exports = app => {
                     to: creator
                 }
             }
-            await this.service.message.create(message);
+            await this.service.message.createReminder(message.content, message.to);
             return message;
         }
     }

@@ -3,58 +3,14 @@ const moment = require('moment');
 const async = require('async');
 const bcrypt = require('bcrypt-nodejs');
 const uuid = require('node-uuid');
-
-// this 是 helper 对象，在其中可以调用其他 helper 方法
-// this.ctx => context 对象
-// this.app => application 对象
+const { pagination, paginationQuery } = require('../lib/pagination');
 
 module.exports = {
-  currentTime() {
-    return moment().format('YYYY-MM-DD hh:mm:ss');
+  get currentTime() {
+    return moment().format('YYYY-MM-DD HH:mm:ss');
   },
-  async search(query, Model, populate = '') {
-    let pagination = { current: 1, pageSize: 10 };
-    let queryParams = {}
-    let sorter = { "_id": 'desc' };
-    let sorterField;
-    let order;
-
-    for (let key in query) {
-      if (key === 'current' || key === 'pageSize') {
-        pagination[key] = +query[key];
-      } else if (key === 'order' || key === 'sorter') {
-        if (key === 'sorter') sorterField = query[key];
-        if (key === 'order') order = query[key]
-      } else {
-        if (Model.schema.obj[key].type.schemaName === 'ObjectId') {
-          queryParams[key] = query[key];
-        } else {
-          queryParams[key] = new RegExp(query[key]);
-        }
-      }
-    }
-
-    if (sorterField && order) sorter = { [sorterField]: order };
-
-    const current = pagination.current;
-    const pageSize = pagination.pageSize;
-    const start = (current - 1) * pageSize;
-    for (let i in queryParams) {
-      if (!queryParams[i]) delete queryParams[i];
-    }
-    let result = {
-      pagination
-    };
-
-    const [count, records] = await Promise.all([
-      Model.count(queryParams),
-      Model.find(queryParams).skip(start).limit(pageSize).populate(populate).sort(sorter)
-    ])
-
-    result.pagination.total = count;
-    result.records = records;
-    return result;
-  },
+  pagination,
+  paginationQuery,
   hashEncode(password, rounds = 5) {
     return new Promise((resolve, reject) => {
       bcrypt.genSalt(rounds, (err, salt) => {

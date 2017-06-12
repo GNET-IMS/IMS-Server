@@ -16,7 +16,7 @@ const createRule = {
 }
 
 module.exports = app => {
-	class UsersController extends app.Controller {
+	class UserController extends app.Controller {
 		async index() {
 			const { ctx, service } = this;
 			const result = await service.user.search(ctx.query);
@@ -29,7 +29,7 @@ module.exports = app => {
 		async show() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const user = await service.user.find(id);
+			const user = await service.user.findById(id);
 			ctx.body = {
 				user
 			};
@@ -83,7 +83,7 @@ module.exports = app => {
 			}
 			ctx.validate(rule);
 			let user = ctx.request.body;
-			user._id = ctx.params.id;
+			user.id = ctx.params.id;
 			const id = await service.user.update(ctx.request.body);
 			ctx.body = {
 				id
@@ -93,7 +93,7 @@ module.exports = app => {
 		async destroy() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const result = await service.user.remove(id);
+			const result = await service.user.deleteById(id);
 			ctx.body = {
 				result
 			};
@@ -112,7 +112,7 @@ module.exports = app => {
 				throw err;
 			}
 			const user = await service.user.update({
-				_id: ctx.params.id,
+				id: ctx.params.id,
 				avatar_url: `/public/images/${filename}`
 			})
 
@@ -124,21 +124,47 @@ module.exports = app => {
 		async getByToken() {
 			const { ctx, service } = this;
 			const access_token = ctx.access_token;
-			const user = await service.accessToken.findUserByAccessToken(access_token);
-			ctx.body = {
-				user
-			};
-			ctx.status = 200;
+			const resp = await ctx.curl(`http://localhost:3000/api/user`, {
+				headers: {
+					Authorization: `bearer ${access_token}`
+				},
+				dataType: 'json'
+			})
+			if (resp.status === 200) {
+				ctx.body = {
+					user: resp.data.user
+				};
+			}
+			ctx.status = resp.status;
 		}
 		async getUnreadMessageNum() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const unreadNum = await service.message.getUnreadNum(id);
+			const unreadNum = await service.notice.getUnreadNum(id);
 			ctx.body = {
 				unreadNum
 			};
 			ctx.status = 200;
 		}
+		async pullAnnouncements() {
+			const { ctx, service } = this;
+			const { id } = ctx.params;
+			const result = await service.user.pullAnnouncements(id);
+			ctx.body = {
+				pull_num: result
+			};
+			ctx.status = 200;
+		}
+		async getAnnouncements() {
+			const { ctx, service } = this;
+			const { id } = ctx.params;
+			const result = await service.user.getAnnouncements(id);
+			ctx.body = {
+				pagination: result.pagination,
+				announcements: result.records
+			}
+			ctx.status = 200;
+		}
 	}
-	return UsersController;
+	return UserController;
 }

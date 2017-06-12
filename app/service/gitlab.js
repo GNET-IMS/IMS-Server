@@ -17,7 +17,6 @@ module.exports = app => {
                     method: 'POST',
                     data: user
                 }, options))
-                console.log(resp, resp.status)
                 if (resp.status !== 200) {
                     message = {
                         type: 'error',
@@ -43,7 +42,7 @@ module.exports = app => {
                     to: creator
                 }
             }
-            await this.service.message.create(message);
+            await this.service.notice.createReminder(message.content, message.to);
             return message;
         }
         index() {

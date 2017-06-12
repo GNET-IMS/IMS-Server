@@ -23,6 +23,26 @@ module.exports = appInfo => {
       }
     },
 
+    mysql: {
+      // database configuration
+      client: {
+        // host
+        host: 'localhost',
+        // port
+        port: '3306',
+        // username
+        user: 'root',
+        // password
+        password: '728198454',
+        // database
+        database: 'IMS',    
+      },
+      // load into app, default is open
+      app: true,
+      // load into agent, default is close
+      agent: false,
+    },
+
     // view: {
     //   defaultViewEngine: 'ejs',
     //   mapping: {
