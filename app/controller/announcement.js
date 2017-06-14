@@ -1,3 +1,8 @@
+const createRule = {
+	content:  { type: 'string', required: true },
+	sender_id: { type: 'number', required: true },
+}
+
 module.exports = app => {
 	class AnnouncementsController extends app.Controller {
 		async index() {
@@ -33,6 +38,19 @@ module.exports = app => {
 			const result = await service.announcement.update(id);
 			ctx.body = {
 				result
+			};
+			ctx.status = 200;
+		}
+		async create() {
+			const { ctx, service } = this;
+			ctx.validate(createRule);
+			console.log(ctx.request.body)
+			const announcement = await service.announcement.create(ctx.request.body);
+			ctx.announcement({
+				message: '有新的公告'
+			}, announcement.sender_id, announcement.receiver_ids);
+			ctx.body = {
+				announcement
 			};
 			ctx.status = 200;
 		}

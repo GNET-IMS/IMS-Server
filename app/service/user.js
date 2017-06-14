@@ -52,7 +52,14 @@ module.exports = app => {
                      [zentao] ${zentao, descrition}`
       })
     }
-    async getAnnouncements(id) {
+    async removeAnnouncement(user_id, announcement_id) {
+      const result = await app.mysql.update('sys_user_announcement', { is_deleted: true }, {
+        where: { user_id, announcement_id },
+        columns: ['is_deleted']
+      })
+      return result.effectedRows === 1;
+    }
+    async getAnnouncements(id, query) {
       const result = await this.ctx.helper.paginationQuery(`
         select announcement.id, announcement.create_date, is_read, content,
         sender_id, sender.name sender_name, sender.avatar_url sender_avatar
@@ -60,7 +67,7 @@ module.exports = app => {
         left join sys_announcement announcement on user_announcement.announcement_id = announcement.id
         left join sys_user sender on announcement.sender_id = sender.id
         where user_announcement.user_id = ? and is_deleted = false
-      `, [id], {}, app.mysql)
+      `, [id], query, app.mysql)
       return result;
     }
     async pullAnnouncements(id) {
@@ -93,12 +100,12 @@ module.exports = app => {
       if (date) {
         result = await app.mysql.query(`
                     select id, create_date from sys_announcement
-                    where create_date > ? and receiver_ids like '%,${id},%'
+                    where create_date > ? and (receiver_ids like '%,${id},%' or receiver_ids is null or receiver_ids = '0')
                 `, [date]);
       } else {
         result = await app.mysql.query(`
                     select id, create_date from sys_announcement 
-                    where receiver_ids like '%,${id},%'
+                    where receiver_ids like '%,${id},%' or receiver_ids is null or receiver_ids = '0'
                 `)
       }
       return result;

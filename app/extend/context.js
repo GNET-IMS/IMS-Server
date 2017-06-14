@@ -40,9 +40,15 @@ module.exports = {
 
     socket.emit('message_response', info)
   },
-  async announcement(info, from) {
-    const io = this.app.io;
-    await this.service.message.createAnnouncement(info.content, from);
-    io.emit('message_response', info)
+  announcement(info, from, to) {
+    if (to) {
+      to.forEach(item => {
+        const socketId = this.service.socket.getSocketId(item);
+        if (socketId) io.sockets.sockets[socketId].emit("message.response", info); 
+      })
+    } else {
+      const io = this.app.io;
+      io.emit('message_response', info)
+    }
   }
 };

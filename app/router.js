@@ -8,6 +8,7 @@ module.exports = app => {
 
   app.get('/api/users/:id/announcements', 'user.getAnnouncements');
   app.post('/api/users/:id/announcements', 'user.pullAnnouncements');
+  app.delete('/api/users/:id/announcements/:announcement_id', 'user.removeAnnouncement');
   
   app.resources('announcements', '/api/announcements', 'announcement');
 

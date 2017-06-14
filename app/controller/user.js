@@ -158,10 +158,20 @@ module.exports = app => {
 		async getAnnouncements() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const result = await service.user.getAnnouncements(id);
+			const query = ctx.query;
+			const result = await service.user.getAnnouncements(id, query);
 			ctx.body = {
 				pagination: result.pagination,
 				announcements: result.records
+			}
+			ctx.status = 200;
+		}
+		async removeAnnouncement() {
+			const { ctx, service } = this;
+			const { id, announcement_id } = ctx.params;
+			const result = await service.user.removeAnnouncement(id, announcement_id);
+			ctx.body = {
+				result
 			}
 			ctx.status = 200;
 		}

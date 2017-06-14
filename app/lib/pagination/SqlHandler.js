@@ -42,7 +42,6 @@ module.exports = class SqlHandler {
 	}
 
 	getSql() {
-		console.log(this.sql)
 		return this.sql;
 	}
 }
